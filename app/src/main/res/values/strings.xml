@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">TabletopAudioMobile</string>
+    <string name="replay">Replay</string>
+    <string name="stream_unavailable_error">Please check network connection</string>
+    <string name="victrola">Victrol</string>
+    <string name="footsteps">Footsteps</string>
+    <string name="rain">Low Rain</string>
+    <string name="horsecart">Horse cart</string>
+    <string name="ethereal">Ethereal</string>
+    <string name="ethereal_dark">Dark Ethereal</string>
+    <string name="bear">Bear</string>
+    <string name="wind">Wind</string>
+    <string name="thunder">Thunder</string>
+    <string name="drums">Drums</string>
+</resources>
