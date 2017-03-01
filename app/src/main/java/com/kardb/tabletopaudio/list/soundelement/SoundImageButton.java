@@ -1,6 +1,9 @@
 package com.kardb.tabletopaudio.list.soundelement;
 
 import android.content.Context;
+import android.databinding.BindingAdapter;
+import android.databinding.InverseBindingMethod;
+import android.databinding.InverseBindingMethods;
 import android.util.AttributeSet;
 import android.widget.ImageButton;
 
@@ -10,9 +13,15 @@ import com.kardb.tabletopaudio.utils.ColorUtils;
 /**
  * Created by bkardys on 27/02/2017.
  */
+@InverseBindingMethods({
+        @InverseBindingMethod(type = SoundImageButton.class, attribute = "app:backgroundIcon"),
+})
 public class SoundImageButton extends ImageButton {
 
-    private SoundElementController controller;
+    @BindingAdapter({"app:backgroundIcon"})
+    public static void setBackgroundIcon(SoundImageButton button, int value) {
+        button.setBackgroundResource(value);
+    }
 
     public SoundImageButton(Context context) {
         super(context);
@@ -33,7 +42,7 @@ public class SoundImageButton extends ImageButton {
         setPressed(isPressed);
     }
 
-    public void setDefaultBackgroundResource() {
-        setBackgroundResource(R.drawable.play_icon);
+    public static int getDefaultBackgroundResource() {
+        return R.drawable.play_icon;
     }
 }

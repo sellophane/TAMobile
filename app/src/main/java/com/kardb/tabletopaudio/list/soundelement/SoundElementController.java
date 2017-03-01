@@ -1,14 +1,14 @@
 package com.kardb.tabletopaudio.list.soundelement;
 
+import android.databinding.BaseObservable;
+import android.databinding.Bindable;
 import android.media.MediaPlayer;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.SeekBar;
 
+import com.kardb.tabletopaudio.BR;
 import com.kardb.tabletopaudio.R;
-import com.kardb.tabletopaudio.utils.ColorUtils;
 import com.kardb.tabletopaudio.utils.ErrorHandler;
 
 import java.io.IOException;
@@ -17,14 +17,13 @@ import java.io.IOException;
  * Created by kardb on 2017-02-26.
  */
 
-public class SoundElementController {
+public class SoundElementController extends BaseObservable {
 
     private SoundElement soundElement;
     private View.OnClickListener toggleRepeatListener;
     private SeekBar.OnSeekBarChangeListener changeVolumeListener;
     private MediaPlayer.OnPreparedListener onMediaPlayerPreparedListener;
     private View.OnTouchListener togglePlayListener;
-    private SoundImageButton imageButton;
     private boolean isPressed;
 
     public View.OnClickListener getToggleRepeatListener() {
@@ -37,30 +36,51 @@ public class SoundElementController {
         return togglePlayListener;
     }
 
+    @Bindable
+    public boolean isPressed() {
+        return isPressed;
+    }
+
+    public void setPressed(boolean pressed) {
+        isPressed = pressed;
+        notifyPropertyChanged(BR.pressed);
+    }
+
+    @Bindable
+    public int getIcon() {
+        return soundElement.isReady() ? soundElement.getDrawable() : SoundImageButton.getDefaultBackgroundResource();
+    }
+
+    public int getName() {
+        return soundElement.getName();
+    }
+
+    public int getVolume() {
+        return soundElement.getVolume();
+    }
+
+    public boolean getRepeat() {
+        return soundElement.isLooping();
+    }
+
     public SoundElementController(SoundElement element) {
         soundElement = element;
         soundElement.setOnPlayChangesListener(new WebMediaPlayer.OnPlayChangesListener() {
 
             @Override
             public void onPlayStarts() {
-                isPressed = true;
-                if (imageButton != null) {
-                    imageButton.setPressedState(true);
-                }
+                setPressed(true);
             }
 
             @Override
             public void onPlayStops() {
-                isPressed = false;
-                if (imageButton != null) {
-                    imageButton.setPressedState(false);
-                }
+                setPressed(false);
             }
         });
         onMediaPlayerPreparedListener = new MediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(MediaPlayer mediaPlayer) {
-                imageButton.setBackgroundResource(soundElement.getDrawable());
+                SoundElementController.this.notifyPropertyChanged(BR.icon);
             }
         };
         changeVolumeListener = new SeekBar.OnSeekBarChangeListener() {
@@ -85,9 +105,7 @@ public class SoundElementController {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-                    imageButton = (SoundImageButton) view;
-                    isPressed = !view.isPressed();
-                    imageButton.setPressedState(isPressed);
+                    setPressed(!view.isPressed());
                     try {
                         if (!soundElement.togglePlay(view.getContext())) {
                             ErrorHandler.displayError(view.getContext(), view.getContext().getString(R.string.stream_unavailable_error));
@@ -102,21 +120,4 @@ public class SoundElementController {
         soundElement.setOnPreparedListener(onMediaPlayerPreparedListener);
     }
 
-    public int getName() {
-        return soundElement.getName();
-    }
-
-    public int getVolume() {
-        return soundElement.getVolume();
-    }
-
-    public void adjustButton(SoundImageButton imgButton) {
-        if (soundElement.isReady()) {
-            imgButton.setBackgroundResource(soundElement.getDrawable());
-        } else {
-            imgButton.setDefaultBackgroundResource();
-        }
-        imgButton.setPressedState(isPressed);
-        imgButton.setOnTouchListener(togglePlayListener);
-    }
 }

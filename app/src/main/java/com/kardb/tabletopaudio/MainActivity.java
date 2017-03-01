@@ -4,8 +4,8 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.widget.ListView;
 
-import com.kardb.tabletopaudio.list.SoundListViewAdapter;
 import com.kardb.tabletopaudio.list.SoundElementDatasource;
+import com.kardb.tabletopaudio.list.SoundListViewAdapter;
 
 public class MainActivity extends Activity {
 

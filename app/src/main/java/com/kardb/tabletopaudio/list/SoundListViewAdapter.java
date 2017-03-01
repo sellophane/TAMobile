@@ -1,19 +1,15 @@
 package com.kardb.tabletopaudio.list;
 
 import android.content.Context;
+import android.databinding.DataBindingUtil;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
-import android.widget.ImageButton;
-import android.widget.SeekBar;
-import android.widget.TextView;
 
-import com.kardb.tabletopaudio.R;
+import com.kardb.tabletopaudio.databinding.ListViewElementBinding;
 import com.kardb.tabletopaudio.list.soundelement.SoundElement;
 import com.kardb.tabletopaudio.list.soundelement.SoundElementController;
-import com.kardb.tabletopaudio.list.soundelement.SoundImageButton;
 
 /**
  * Created by kardb on 2017-02-26.
@@ -38,19 +34,14 @@ public class SoundListViewAdapter extends ArrayAdapter<SoundElementController> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        ListViewElementBinding binding;
         if (convertView == null) {
-            convertView = inflater.inflate(R.layout.list_view_element, null);
+            binding = ListViewElementBinding.inflate(inflater, parent, false);
+            convertView = binding.getRoot();
+        } else {
+            binding = DataBindingUtil.getBinding(convertView);
         }
-        SoundElementController controller =  this.getItem(position);
-        SoundImageButton imgButton = (SoundImageButton) convertView.findViewById(R.id.list_view_item_logo);
-        controller.adjustButton(imgButton);
-        TextView title = (TextView) convertView.findViewById(R.id.list_view_item_textView);
-        title.setText(convertView.getContext().getString(controller.getName()));
-        SeekBar seekBar = (SeekBar) convertView.findViewById(R.id.list_view_item_seekBar);
-        seekBar.setOnSeekBarChangeListener(controller.getChangeVolumeListener());
-        seekBar.setProgress(controller.getVolume());
-        CheckBox checkBox = (CheckBox) convertView.findViewById(R.id.list_view_item_checkBox);
-        checkBox.setOnClickListener(controller.getToggleRepeatListener());
+        binding.setSoundElementController(this.getItem(position));
         return convertView;
     }
 }

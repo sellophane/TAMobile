@@ -28,6 +28,10 @@ public class SoundElement {
         player.setOnPlayChangesListener(playChangesListener);
     }
 
+    public boolean isLooping() {
+        return replay;
+    }
+
     private enum STATUS {UNINITIALIZED, PREPARING, READY};
     private STATUS currentStatus = STATUS.UNINITIALIZED;
 
@@ -36,7 +40,7 @@ public class SoundElement {
         soundUrl = fileName;
         name = nameId;
         replay = false;
-        volume = 0.5f;
+        volume = 0.1f;
         drawable = drawableId;
     }
 

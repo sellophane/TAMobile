@@ -1,15 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable name="soundElementController" type="com.kardb.tabletopaudio.list.soundelement.SoundElementController"/>
+    </data>
+    <LinearLayout
     android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+
         <LinearLayout
             android:layout_width="70dp"
             android:layout_height="70dp"
             android:padding="10dp">
             <com.kardb.tabletopaudio.list.soundelement.SoundImageButton
-                android:id="@+id/list_view_item_logo"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/play_icon_gray"/>
+                app:backgroundIcon="@{soundElementController.icon}"
+                android:pressedState="@{soundElementController.pressed}"
+                android:onTouchListener="@{soundElementController.togglePlayListener}"/>
         </LinearLayout>
         <LinearLayout
             android:padding="10dp"
@@ -21,11 +28,11 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="end">
                 <TextView
+                    android:text="@{soundElementController.name}"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:textColor="@color/bright"
-                    android:id="@+id/list_view_item_textView" />
+                    android:textColor="@color/bright" />
                 <CheckBox
                     android:text="@string/replay"
                     android:layout_gravity="end"
@@ -33,7 +40,8 @@
                     android:textColor="@color/bright"
                     android:layout_height="wrap_content"
                     android:buttonTint="@color/white"
-                    android:id="@+id/list_view_item_checkBox" />
+                    android:checked="@{soundElementController.repeat}"
+                    android:onClick="@{soundElementController.toggleRepeatListener}"/>
             </LinearLayout>
             <SeekBar
                 android:layout_width="match_parent"
@@ -41,8 +49,8 @@
                 android:progressTint="@color/white"
                 android:progressBackgroundTint="@color/grey"
                 android:thumbTint="@color/white"
-                android:id="@+id/list_view_item_seekBar" />
+                android:progress="@{soundElementController.volume}"
+                android:onSeekBarChangeListener="@{soundElementController.changeVolumeListener}"/>
         </LinearLayout>
-
-
 </LinearLayout>
+</layout>
