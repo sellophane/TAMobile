@@ -1,5 +1,6 @@
 package com.kardb.tabletopaudio.list.soundelement;
 
+import android.accounts.NetworkErrorException;
 import android.content.Context;
 import android.media.MediaPlayer;
 
@@ -58,23 +59,24 @@ public class SoundElement {
         this.player.setLooping(replay);
     }
 
-    public boolean togglePlay(Context context) throws IOException {
-        if (NetUtils.isConnected(context)) {
-            if (currentStatus != STATUS.READY) {
-                if (currentStatus == STATUS.UNINITIALIZED) {
-                    currentStatus = STATUS.PREPARING;
-                    player.setSoundFile(soundUrl);
-                    player.prepareAsync();
-                }
-            } else if (player.isPlaying()) {
+    public boolean togglePlayIfReady(Context context) throws IOException, NetworkErrorException {
+        if (!NetUtils.isConnected(context)) {
+            throw new NetworkErrorException();
+        }
+        boolean isReady = false;
+        if (currentStatus == STATUS.READY) {
+            if (player.isPlaying()) {
                 player.pause();
             } else {
                 player.start();
             }
-        } else {
-            return false;
+            isReady = true;
+        } else if (currentStatus == STATUS.UNINITIALIZED) {
+            currentStatus = STATUS.PREPARING;
+            player.setSoundFile(soundUrl);
+            player.prepareAsync();
         }
-        return true;
+        return isReady;
     }
 
     public boolean isReady() {

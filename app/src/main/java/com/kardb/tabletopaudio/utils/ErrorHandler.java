@@ -11,7 +11,6 @@ import android.widget.Toast;
 public class ErrorHandler {
 
     public static void handleError(Context context, Exception e) {
-        Log.d("TabletopAudio", "Error occured", e);
         displayError(context, e.getLocalizedMessage());
     }
 

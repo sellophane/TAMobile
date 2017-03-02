@@ -1,5 +1,6 @@
 package com.kardb.tabletopaudio.list.soundelement;
 
+import android.accounts.NetworkErrorException;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.media.MediaPlayer;
@@ -105,13 +106,14 @@ public class SoundElementController extends BaseObservable {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-                    setPressed(!view.isPressed());
                     try {
-                        if (!soundElement.togglePlay(view.getContext())) {
-                            ErrorHandler.displayError(view.getContext(), view.getContext().getString(R.string.stream_unavailable_error));
+                        if (!soundElement.togglePlayIfReady(view.getContext())) {
+                            setPressed(!view.isPressed());
                         }
                     } catch (IOException e) {
                         ErrorHandler.handleError(view.getContext(), e);
+                    } catch (NetworkErrorException e) {
+                        ErrorHandler.displayError(view.getContext(), view.getContext().getString(R.string.stream_unavailable_error));
                     }
                 }
                 return true;
