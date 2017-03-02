@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="main_view_separator">10dp</dimen>
-    <dimen name="list_view_icon_size">72dpi</dimen>
-    <dimen name="list_view_icon_padding">10dp</dimen>
+    <dimen name="list_view_item_padding">10dp</dimen>
+    <dimen name="list_view_icon_size">70dp</dimen>
+    <dimen name="list_view_icon_padding">11dp</dimen>
 </resources>
